@@ -26,22 +26,23 @@ export class Engine {
 
   private detectWorldCollisions(
     worldObjects: WorldObject[],
-    character: Character,
     onCollision: (obj: WorldObject) => void,
   ) {
-    const charRadius = character.radius || 0;
+    worldObjects.forEach((obj) => {
+      // distance x to object
+      const dx = this.character.position.x - obj.position.x;
+      // distance y to object
+      const dy = this.character.position.y - obj.position.y;
 
-    for (const obj of worldObjects) {
-      const objRadius = obj.radius || 0;
-
-      const dx = character.position.x - obj.position.x;
-      const dy = character.position.y - obj.position.y;
+      // Pythagorean theorem
       const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < charRadius + objRadius) {
+      if (
+        distance < this.character.radius + obj.radius &&
+        obj.id !== this.character.id
+      ) {
         onCollision(obj);
       }
-    }
+    });
   }
 
   update() {
@@ -61,9 +62,10 @@ export class Engine {
         acceleration * Math.sin(angle) * this.timeStep,
     );
 
-    this.detectWorldCollisions(this.worldObjects, this.character, (obj) => {
-      console.log("Collision detected with object at position:", obj.position);
-      this.stop();
+    this.detectWorldCollisions(this.worldObjects, (obj) => {
+      console.log("Collision with object ID:", obj.id);
+      // Simple collision response: stop the character
+      this.character.updateVelocity(0, 0);
     });
 
     this.character.move(
@@ -87,22 +89,27 @@ export class Engine {
   draw(ctx: CanvasRenderingContext2D) {
     this.zipline.draw(ctx);
     this.character.draw(ctx);
+    this.worldObjects.forEach((obj) => obj.draw(ctx));
   }
 
   run(ctx: CanvasRenderingContext2D) {
     this.isRunning = true;
 
     const loop = () => {
-      if (!this.isRunning) return; // stop loop if engine stopped
+      if (!this.isRunning) return;
 
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       this.update();
       this.draw(ctx);
+      this.worldObjects.forEach((obj) => {
+        obj.draw(ctx);
+        obj.drawHitbox(ctx);
+      });
 
       requestAnimationFrame(loop);
     };
 
-    requestAnimationFrame(loop); // start animation
+    requestAnimationFrame(loop);
   }
 
   stop() {

@@ -6,7 +6,7 @@ export class Pole extends WorldObject {
   private img: HTMLImageElement;
 
   constructor(point: Point) {
-    super(point.x, point.y);
+    super(point.x, point.y, 29);
     this.img = new Image();
     this.img.src = ZiplinePoleSVG;
   }

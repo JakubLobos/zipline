@@ -20,7 +20,7 @@ const poleB = new Pole(
 
 const startPoint = zipline.getMeshPoints()[0];
 
-const character = new Character(startPoint.x + 160, startPoint.y, 15);
+const character = new Character(startPoint.x + 60, startPoint.y + 10, 15);
 const engine = new Engine(zipline, character);
 
 engine.addWorldObject([poleA, poleB, character]);
