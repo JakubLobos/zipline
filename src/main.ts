@@ -1,5 +1,6 @@
 import { Character } from "./character";
 import { Engine } from "./engine";
+import { Pole } from "./pole";
 import { setupCanvas } from "./utils/setupCanvas";
 import { Zipline } from "./zipline";
 
@@ -11,10 +12,18 @@ const zipline = new Zipline(100, false);
 zipline.addPoint(100, 250);
 zipline.addPoint(1200, 600);
 
+// draw poles
+const poleA = new Pole(zipline.getMeshPoints()[0]);
+const poleB = new Pole(
+  zipline.getMeshPoints()[zipline.getMeshPoints().length - 1],
+);
+
 const startPoint = zipline.getMeshPoints()[0];
 
-const character = new Character(startPoint.x + 30, startPoint.y, 15);
+const character = new Character(startPoint.x + 160, startPoint.y, 15);
 const engine = new Engine(zipline, character);
+
+engine.addWorldObject([poleA, poleB, character]);
 
 const draw = () => {
   const { width, height } = setupCanvas(canvas);
@@ -23,6 +32,8 @@ const draw = () => {
 
   if (ctx) {
     ctx.clearRect(0, 0, width, height);
+    poleA.draw(ctx);
+    poleB.draw(ctx);
     engine.draw(ctx);
   }
 };

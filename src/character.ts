@@ -1,17 +1,15 @@
 import CharacterSVG from "./assets/character.svg";
 import type { Point } from "./types";
+import { WorldObject } from "./world-object";
 
 const CHARACTER_SVG_MARGIN = 25;
 
-export class Character {
-  public readonly position: Point;
-  private radius: number;
+export class Character extends WorldObject {
   private img: HTMLImageElement;
   public readonly velocity: Point = { x: 0, y: 0 };
 
   constructor(x: number, y: number, radius: number = 10) {
-    this.position = { x, y };
-    this.radius = radius;
+    super(x, y, radius);
     this.img = new Image();
     this.img.src = CharacterSVG;
   }

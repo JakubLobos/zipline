@@ -1,4 +1,3 @@
-import { Pole } from "./pole";
 import type { Point } from "./types";
 
 export class Zipline {
@@ -44,12 +43,6 @@ export class Zipline {
 
     ctx.beginPath();
     ctx.moveTo(this.meshPoints[0].x + 0.5, this.meshPoints[0].y + 0.5);
-
-    // draw poles
-    const poleA = new Pole(this.meshPoints[0]);
-    const poleB = new Pole(this.meshPoints[this.meshPoints.length - 1]);
-    poleA.draw(ctx);
-    poleB.draw(ctx);
 
     // draw line
     for (let i = 1; i < this.meshPoints.length; i++) {

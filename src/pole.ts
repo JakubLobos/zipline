@@ -1,15 +1,14 @@
 import ZiplinePoleSVG from "./assets/pole.svg";
 import type { Point } from "./types";
+import { WorldObject } from "./world-object";
 
-export class Pole {
-  private point: Point;
+export class Pole extends WorldObject {
   private img: HTMLImageElement;
 
   constructor(point: Point) {
+    super(point.x, point.y);
     this.img = new Image();
     this.img.src = ZiplinePoleSVG;
-
-    this.point = point;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -17,8 +16,8 @@ export class Pole {
     const poleWidth = 29;
     ctx.drawImage(
       this.img,
-      this.point.x - poleWidth / 2,
-      this.point.y - 4,
+      this.position.x - poleWidth / 2,
+      this.position.y - 4,
       poleWidth,
       poleHeight,
     );
